@@ -21,7 +21,7 @@ import org.apache.http.util.EntityUtils;
 import com.foobnix.android.commons.util.LOG;
 import com.google.common.base.Strings;
 
-public abstract class GeneralRequestHelper {
+public class GeneralRequestHelper {
 
 	protected final DefaultHttpClient client;
 
@@ -143,7 +143,9 @@ public abstract class GeneralRequestHelper {
 
 	}
 
-	public abstract String getAcceptHeaderString();
+	public String getAcceptHeaderString(){
+		return "";
+	}
 
 	private synchronized String httpRequest(HttpRequestBase request) {
 		LOG.d("Request URI", request.getURI());
