@@ -1,7 +1,6 @@
 package com.foobnix.android.commons.http;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -23,6 +22,7 @@ import com.google.common.base.Strings;
 
 public class GeneralRequestHelper {
 
+	private static final String UTF_8 = "UTF-8";
 	protected final DefaultHttpClient client;
 
 	public GeneralRequestHelper() {
@@ -35,15 +35,15 @@ public class GeneralRequestHelper {
 		return httpRequest(request);
 	}
 
-	public String get(String url, BasicNameValuePair... params) {
-		return get(url, Arrays.asList(params));
+	public String get(String url, List<BasicNameValuePair> params) {
+		return get(url, params, UTF_8);
 	}
 
-	public String get(String url, List<BasicNameValuePair> params) {
+	public String get(String url, List<BasicNameValuePair> params, String encoding) {
 		LOG.d("GET");
 		HttpGet request = null;
 		if (params != null) {
-			String paramsList = URLEncodedUtils.format(params, "UTF-8");
+			String paramsList = URLEncodedUtils.format(params, encoding);
 			String reqUrl = url + "?" + paramsList;
 			LOG.d("GET", reqUrl);
 			request = new HttpGet(reqUrl);
@@ -57,7 +57,7 @@ public class GeneralRequestHelper {
 		LOG.d("DELETE");
 		HttpDelete request = null;
 		if (params != null) {
-			String paramsList = URLEncodedUtils.format(params, "UTF-8");
+			String paramsList = URLEncodedUtils.format(params, UTF_8);
 			String reqUrl = url + "?" + paramsList;
 			LOG.d("GET", reqUrl);
 			request = new HttpDelete(reqUrl);
@@ -75,7 +75,7 @@ public class GeneralRequestHelper {
 		if (params != null) {
 			request = new HttpPost(url);
 			try {
-				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
+				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, UTF_8);
 				request.setEntity(entity);
 			} catch (UnsupportedEncodingException e) {
 				LOG.e("POST exception", e);
@@ -93,7 +93,7 @@ public class GeneralRequestHelper {
 		HttpPost request = new HttpPost(url);
 		StringEntity entity;
 		try {
-			entity = new StringEntity(value, "UTF-8");
+			entity = new StringEntity(value, UTF_8);
 			request.setEntity(entity);
 		} catch (UnsupportedEncodingException e) {
 			LOG.e(e);
@@ -108,7 +108,7 @@ public class GeneralRequestHelper {
 		HttpPut request = new HttpPut(url);
 		StringEntity entity;
 		try {
-			entity = new StringEntity(value, "UTF-8");
+			entity = new StringEntity(value, UTF_8);
 			request.setEntity(entity);
 		} catch (UnsupportedEncodingException e) {
 			LOG.e(e);
@@ -124,7 +124,7 @@ public class GeneralRequestHelper {
 		if (params != null) {
 			request = new HttpPut(url);
 			try {
-				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
+				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, UTF_8);
 				request.setEntity(entity);
 			} catch (UnsupportedEncodingException e) {
 				LOG.e("POST exception", e);
@@ -156,13 +156,18 @@ public class GeneralRequestHelper {
 			if (!Strings.isNullOrEmpty(getAcceptHeaderString())) {
 				request.addHeader("Accept", getAcceptHeaderString());
 			}
+
 			HttpResponse response = client.execute(request);
 
 			HttpEntity entity = response.getEntity();
+			if (entity.getContentEncoding() != null) {
+				LOG.d("Encoding", entity.getContentEncoding());
+			}
 			strResponse = EntityUtils.toString(entity);
 			LOG.d("Http Response");
 			LOG.d("==========");
 			LOG.d(strResponse);
+
 			LOG.d("==========");
 		} catch (Exception e) {
 			LOG.e("Error Response ", e);
