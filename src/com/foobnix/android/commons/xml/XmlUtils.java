@@ -10,7 +10,7 @@ public class XmlUtils {
 	public static <T> T toModel(String xml, Class<T> clazz) {
 		Serializer serializer = new Persister();
 		try {
-			return (T) serializer.read(clazz, xml);
+			return (T) serializer.read(clazz, xml, false);
 		} catch (Exception e) {
 			LOG.e(e);
 			try {
