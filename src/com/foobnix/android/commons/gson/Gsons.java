@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 public class Gsons {
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 	public static final String YYYY_MM_DD = "yyyy-MM-dd";
+	public static final String YYYY_l_MM_l_DD = "yyyy/MM/dd";
 	private final static ExcludeServerTagStrategy exludeServer = new ExcludeServerTagStrategy();
 	private final static ExcludeAllTagStrategy exludeAll = new ExcludeAllTagStrategy();
 
