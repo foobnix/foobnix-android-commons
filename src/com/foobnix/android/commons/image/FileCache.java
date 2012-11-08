@@ -12,7 +12,8 @@ public class FileCache {
 
 	public FileCache(Context context) {
 		// Find the dir to save cached images
-		if (context == null || android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+		if (context == null
+				|| android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Podorozhniki");
 		} else {
 			cacheDir = context.getCacheDir();
@@ -37,8 +38,10 @@ public class FileCache {
 			return;
 		}
 		File[] files = cacheDir.listFiles();
-		for (File f : files)
-			f.delete();
+		if (files != null) {
+			for (File f : files)
+				f.delete();
+		}
 	}
 
 }

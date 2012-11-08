@@ -21,8 +21,7 @@ public class Gsons {
 	private final static ExcludeAllTagStrategy exludeAll = new ExcludeAllTagStrategy();
 
 	public static Map<String, String> toMapModel(String json) {
-		return Gsons.toSimpleModel(json, new TypeToken<Map<String, String>>() {
-		}.getType());
+		return Gsons.toSimpleModel(json, new TypeToken<Map<String, String>>() {}.getType());
 	}
 
 	public static <T> T toModel(String json, Class<T> clazz) {
@@ -74,16 +73,23 @@ public class Gsons {
 		return fromJson;
 	}
 
-	public static String toJson(Object model) {
+	public static String toJson(Object model, Type type) {
 		Gson gson = createGSON(true);
-		String json = gson.toJson(model);
+		String json = gson.toJson(model, type);
 		LOG.d("Model to gson: ", json, model);
 		return json;
 	}
 
-	public static String toJsonNoExclude(Object model) {
+	public static String toJson(Object model, Class<?> clazz) {
+		Gson gson = createGSON(true);
+		String json = gson.toJson(model, clazz);
+		LOG.d("Model to gson: ", json, model);
+		return json;
+	}
+
+	public static String toJsonNoExclude(Object model, Type type) {
 		Gson gson = createGSON(false);
-		String json = gson.toJson(model);
+		String json = gson.toJson(model, type);
 		LOG.d("Model to gson: ", json, model);
 		return json;
 	}

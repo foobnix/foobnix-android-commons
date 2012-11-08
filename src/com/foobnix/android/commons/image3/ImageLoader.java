@@ -32,14 +32,14 @@ public class ImageLoader {
 	}
 
 
-	public void DisplayImage(String url, ImageView imageView) {
+	public void DisplayImage(String url, ImageView imageView, int resDefImage) {
 		imageViews.put(imageView, url);
 		Bitmap bitmap = memoryCache.get(url);
 		if (bitmap != null)
 			imageView.setImageBitmap(bitmap);
 		else {
 			queuePhoto(url, imageView);
-			imageView.setImageResource(android.R.drawable.btn_default);
+			imageView.setImageResource(resDefImage);
 		}
 	}
 
@@ -52,7 +52,9 @@ public class ImageLoader {
 		File f = fileCache.getFile(url);
 
 		// from SD cache
-		Bitmap b = decodeFile(f);
+		// Bitmap b = decodeFile(f);
+		Bitmap b = BitmapFactory.decodeFile(f.getPath());
+
 		if (b != null)
 			return b;
 

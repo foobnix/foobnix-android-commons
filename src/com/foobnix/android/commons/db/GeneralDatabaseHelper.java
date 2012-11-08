@@ -1,6 +1,8 @@
 package com.foobnix.android.commons.db;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
@@ -14,15 +16,17 @@ import com.j256.ormlite.table.TableUtils;
 
 public class GeneralDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-	private final Map<Class<? extends DbTable>, Dao<? extends DbTable, Integer>> TABLES; //
-	// new HashMap<Class<? extends DbTable>, Dao<? extends DbTable, Integer>>();
+	private final static Map<Class<? extends DbTable>, Dao<? extends DbTable, Integer>> TABLES = new HashMap<Class<? extends DbTable>, Dao<? extends DbTable, Integer>>();
 	private final Context context;
 
-	public GeneralDatabaseHelper(Context context,
-			Map<Class<? extends DbTable>, Dao<? extends DbTable, Integer>> TABLES, String name, int version) {
+	public GeneralDatabaseHelper(Context context, List<Class<? extends DbTable>> tables, String name, int version) {
 		super(context, name, null, version);
 		this.context = context;
-		this.TABLES = TABLES;
+		for (Class<? extends DbTable> table : tables) {
+			if (!TABLES.containsKey(table)) {
+				TABLES.put(table, null);
+			}
+		}
 	}
 
 	@Override

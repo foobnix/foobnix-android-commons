@@ -23,7 +23,7 @@ public class GeneralApiService<AppModel extends RequireId, DbModel extends DbTab
 		LOG.d("Syncronize");
 		dao.cleanTable();
 		Response allRemote = remote.getAll();
-		if (allRemote.isSuccess()) {
+		if (allRemote != null && allRemote.isSuccess()) {
 			for (AppModel place : allRemote.getModels()) {
 				dao.save(place);
 			}
@@ -75,7 +75,11 @@ public class GeneralApiService<AppModel extends RequireId, DbModel extends DbTab
 
 	@Override
 	public boolean delete(AppModel model) {
-		return dao.delete(model);
+		Response delete = remote.delete(model);
+		if (delete != null && delete.isSuccess()) {
+			return dao.delete(model);
+		}
+		return false;
 	}
 
 	public DbGeneralDao<AppModel, DbModel> getDao() {
